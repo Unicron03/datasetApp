@@ -41,15 +41,15 @@ with tabMain:
     st.write("")
     st.write("")
 
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        st.page_link("pages/create.py", label="CREATE", icon="1️⃣")
+    col1, col2, col3, col4, col5 = st.columns([1,2,1,2,1])
 
     with col2:
-        st.page_link("pages/update.py", label="UPDATE", icon="2️⃣")
+        st.page_link("pages/create.py", label="CREATE", icon="1️⃣")
 
     with col3:
+        st.page_link("pages/update.py", label="UPDATE", icon="2️⃣")
+
+    with col4:
         st.page_link("pages/view.py", label="VIEW", icon="3️⃣")
     
 st.markdown("---")
