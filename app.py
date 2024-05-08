@@ -2,18 +2,6 @@
 import pandas as pd
 import numpy as np
 
-st.markdown(
-    """
-    <style>
-    body {
-        background-image: url("https://www.numerama.com/wp-content/uploads/2016/09/grumpycat.jpg");
-        background-size: cover;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 st.set_page_config(
     page_title="datasetapp", page_icon="💾", initial_sidebar_state="collapsed"
 )
