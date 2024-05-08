@@ -9,7 +9,7 @@ st.set_page_config(
 st.image("cat.gif")
 st.markdown("# Dataset")
 st.write(
-    "This app This application lets you create datasets, update them, navigate through them and much more !"
+    "This app lets you create datasets, update them, navigate through them and much more !"
 )
 
 tabMain, tabInfo = st.tabs(["Main", "Info"])
@@ -38,6 +38,9 @@ with tabInfo:
     )
 
 with tabMain:
+    st.write("")
+    st.write("")
+
     col1, col2, col3 = st.columns(3)
 
     with col1:
