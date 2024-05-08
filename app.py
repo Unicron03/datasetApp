@@ -5,7 +5,12 @@ import numpy as np
 st.set_page_config(
     page_title="datasetapp", page_icon="💾", initial_sidebar_state="collapsed"
 )
+
+st.image("cat.gif")
 st.markdown("# Dataset")
+st.write(
+    "This app This application lets you create datasets, update them, navigate through them and much more !"
+)
 
 col1, col2, col3 = st.columns(3)
 
