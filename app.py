@@ -14,6 +14,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.set_page_config(
+    page_title="datasetapp", page_icon="💾", initial_sidebar_state="collapsed"
+)
+st.markdown("# Dataset")
+
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -24,3 +29,8 @@ with col2:
 
 with col3:
     st.page_link("pages/view.py", label="VIEW", icon="3️⃣")
+    
+st.markdown("---")
+st.markdown(
+    "More infos at [github.com/Unicron03/datasetApp](https://github.com/Unicron03/datasetApp)"
+)
