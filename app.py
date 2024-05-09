@@ -36,6 +36,24 @@ with tabInfo:
         - Deploy your apps using [Streamlit Community Cloud](https://streamlit.io/cloud) in just a few clicks 
     """
     )
+    
+    st.write("---")
+
+    st.subheader("👥 About us")
+    st.markdown(
+        """
+    This project was carried out by a group of 3 computer science students.
+    - Enzo Vandepoele
+        - [GitHub](https://github.com/Unicron03)
+        - [LinkedIn](https://www.linkedin.com/in/enzo-vandepoele-3224ab2b2/)
+    - John Micallef
+        - [GitHub](https://github.com/johnmclf)
+        - [LinkedIn](https://www.linkedin.com/in/john-micallef-8227482bb/)
+    - Amen Ahouandogbo
+        - [GitHub](https://github.com/Jores02)
+        - [LinkedIn](https://www.linkedin.com/in/amen-ahouandogbo-069604220/)
+    """
+    )
 
 with tabMain:
     st.write("")
