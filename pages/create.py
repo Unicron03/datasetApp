@@ -53,7 +53,7 @@ if st.session_state.df.columns.tolist():
     if st.session_state.show_download_buttons:
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.download_button("Télécharger en CSV", data=pd.concat([st.session_state.df, "new_data test when download"], ignore_index=True).to_csv(index=False), file_name="data.csv", mime="text/csv")
+            st.download_button("Télécharger en CSV", data=st.session_state.df.to_csv(index=False), file_name="data.csv", mime="text/csv")
         with col2:
             st.download_button("Télécharger en JSON", data=st.session_state.df.to_json(orient="records"), file_name="data.json", mime="application/json")
         with col3:
