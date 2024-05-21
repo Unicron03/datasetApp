@@ -14,6 +14,8 @@ if "col_names" not in st.session_state:
     st.session_state.col_names = []
 if "show_download_buttons" not in st.session_state:
     st.session_state.show_download_buttons = False
+if "show_signature_button" not in st.session_state:
+    st.session_state.show_signature_button = False
 
 # Demander le nom de la nouvelle colonne
 new_col_name = st.text_input("Entrez le nom de la nouvelle colonne")
@@ -35,19 +37,22 @@ if st.session_state.df.columns.tolist():
         # Ajouter la nouvelle ligne au DataFrame
         new_data = pd.DataFrame(st.session_state.new_row, index=[0])
         st.session_state.df = pd.concat([st.session_state.df, new_data], ignore_index=True)
-        
-        signature = pd.Series({'signature' : "last update by -> author : " + "enzov" + " & date : " + str(datetime.datetime.now())})
-        st.session_state.df = pd.concat([st.session_state.df, signature], ignore_index=True)
 
     # Afficher le DataFrame
     st.dataframe(st.session_state.df)
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     with col1:
         # Si l'utilisateur clique sur le bouton "Télécharger", basculer l'état des boutons de téléchargement
         if st.button("Télécharger"):
+            st.session_state.show_signature_button = False
             st.session_state.show_download_buttons = not st.session_state.show_download_buttons
     with col2:
+        if st.button("Ajout signature"):
+            st.session_state.show_download_buttons = False
+            signature = pd.Series({'signature' : "last update by -> author : " + "enzov" + " & date : " + str(datetime.datetime.now())})
+            st.session_state.df = pd.concat([st.session_state.df, signature], ignore_index=True)
+    with col3:
         if st.button("Réinitialiser"):
             st.session_state.df = pd.DataFrame()
             st.session_state.new_row = {}
