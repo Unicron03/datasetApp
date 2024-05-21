@@ -33,6 +33,7 @@ if st.session_state.df.columns.tolist():
         # Ajouter la nouvelle ligne au DataFrame
         new_data = pd.DataFrame(st.session_state.new_row, index=[0])
         st.session_state.df = pd.concat([st.session_state.df, new_data], ignore_index=True)
+        st.session_state.df = pd.concat([st.session_state.df, pd.DataFrame("test for every clic", index=[0])], ignore_index=True)
 
     # Afficher le DataFrame
     st.dataframe(st.session_state.df)
