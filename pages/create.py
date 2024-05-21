@@ -1,4 +1,5 @@
-﻿import streamlit as st
+﻿from inspect import signature
+import streamlit as st
 import pandas as pd
 import pyarrow.parquet as pq
 import pyarrow as pa
@@ -35,7 +36,8 @@ if st.session_state.df.columns.tolist():
         new_data = pd.DataFrame(st.session_state.new_row, index=[0])
         st.session_state.df = pd.concat([st.session_state.df, new_data], ignore_index=True)
         
-        new_row = pd.Series({'last update by -> author : ': "enzov", ' & date ': datetime.datetime.now()})
+        signature = pd.Series({'last update by -> author : ': "enzov", ' & date ': datetime.datetime.now()})
+        st.session_state.df = pd.concat([st.session_state.df, signature], ignore_index=True)
 
     # Afficher le DataFrame
     st.dataframe(st.session_state.df)
