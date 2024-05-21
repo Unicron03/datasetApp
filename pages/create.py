@@ -121,12 +121,9 @@ if st.session_state.df.columns.tolist():
             st.session_state.show_download_buttons = not st.session_state.show_download_buttons
     with col2:
         if st.button("Ajout signature"):
-            user_name = st.text_input("Entrez votre nom")
-            if user_name:
-                if st.button("Valider"):
-                    st.session_state.show_download_buttons = False
-                    signature = pd.Series({st.session_state.col_names[0] : user_name, st.session_state.col_names[1] : str(datetime.datetime.now())})
-                    st.session_state.df = pd.concat([st.session_state.df, signature.to_frame().T], ignore_index=True)
+            st.session_state.show_download_buttons = False
+            signature = pd.Series({st.session_state.col_names[0] : "enzov", st.session_state.col_names[1] : str(datetime.datetime.now())})
+            st.session_state.df = pd.concat([st.session_state.df, signature.to_frame().T], ignore_index=True)
     with col3:
         if st.button("Réinitialiser"):
             st.session_state.df = pd.DataFrame()
