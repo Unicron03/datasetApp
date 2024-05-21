@@ -50,6 +50,7 @@ if st.session_state.df.columns.tolist():
     with col2:
         if st.button("Ajout signature"):
             st.session_state.show_download_buttons = False
+            st.session_state.show_signature_button = not st.session_state.show_signature_button
             user_name = st.text_input("Entrez votre nom")
             if user_name:
                 if st.button("Valider"):
