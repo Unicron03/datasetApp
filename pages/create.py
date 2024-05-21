@@ -51,11 +51,14 @@ if st.session_state.df.columns.tolist():
         if st.button("Ajout signature"):
             st.session_state.show_download_buttons = False
             st.session_state.show_signature_button = not st.session_state.show_signature_button
-            user_name = st.text_input("Entrez votre nom")
-            if user_name:
-                if st.button("Valider"):
-                    signature = pd.Series({st.session_state.col_names[0] : user_name, st.session_state.col_names[1] : str(datetime.datetime.now())})
-                    st.session_state.df = pd.concat([st.session_state.df, signature.to_frame().T], ignore_index=True)
+
+    # Si l'utilisateur a cliqué sur "Ajout signature"
+    if st.session_state.show_signature_button:
+        user_name = st.text_input("Entrez votre nom")
+        if user_name:
+            if st.button("Valider"):
+                signature = pd.Series({st.session_state.col_names[0] : user_name, st.session_state.col_names[1] : str(datetime.datetime.now())})
+                st.session_state.df = pd.concat([st.session_state.df, signature.to_frame().T], ignore_index=True)
     with col3:
         if st.button("Réinitialiser"):
             st.session_state.df = pd.DataFrame()
