@@ -50,7 +50,7 @@ if st.session_state.df.columns.tolist():
     with col2:
         if st.button("Ajout signature"):
             st.session_state.show_download_buttons = False
-            signature = pd.Series({'author' : "enzov", 'date' : str(datetime.datetime.now())})
+            signature = pd.Series({"enzov", str(datetime.datetime.now())})
             st.session_state.df = pd.concat([st.session_state.df, signature.to_frame().T], ignore_index=True)
     with col3:
         if st.button("Réinitialiser"):
