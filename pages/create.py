@@ -2,6 +2,7 @@
 import pandas as pd
 import pyarrow.parquet as pq
 import pyarrow as pa
+import datetime
 
 # Initialiser session_state si nécessaire
 if "df" not in st.session_state:
@@ -33,7 +34,21 @@ if st.session_state.df.columns.tolist():
         # Ajouter la nouvelle ligne au DataFrame
         new_data = pd.DataFrame(st.session_state.new_row, index=[0])
         st.session_state.df = pd.concat([st.session_state.df, new_data], ignore_index=True)
-        st.session_state.df = pd.concat([st.session_state.df, pd.DataFrame("test for every clic", index=[0])], ignore_index=True)
+        
+        today = datetime.datetime.now()
+        next_year = today.year + 1
+        jan_1 = datetime.date(next_year, 1, 1)
+        dec_31 = datetime.date(next_year, 12, 31)
+
+        # Affiche un sélecteur de date pour les vacances de l'année prochaine
+        selected_date = st.date_input(
+            "Sélectionnez vos vacances pour l'année prochaine",
+            (jan_1, datetime.date(next_year, 1, 7)),
+            jan_1,
+            dec_31,
+            format="MM.DD.YYYY",
+        )
+        new_row = pd.Series({'last update by -> author : ': "enzov", ' & date ': selected_date})
 
     # Afficher le DataFrame
     st.dataframe(st.session_state.df)
