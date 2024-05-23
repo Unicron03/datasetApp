@@ -17,6 +17,10 @@ if "show_download_buttons" not in st.session_state:
 if "show_signature_button" not in st.session_state:
     st.session_state.show_signature_button = False
 
+coll1, coll2, coll3 = st.columns(3)
+with coll2:
+    st.markdown("Create")
+
 # Demander le nom de la nouvelle colonne
 new_col_name = st.text_input("Entrez le nom de la nouvelle colonne")
 if new_col_name:  # Vérifier si le nom de la colonne n'est pas vide
