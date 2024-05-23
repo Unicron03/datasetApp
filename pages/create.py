@@ -24,7 +24,7 @@ if new_col_name:  # Vérifier si le nom de la colonne n'est pas vide
         st.session_state.col_names.append(new_col_name)
         # Ajouter la nouvelle colonne au DataFrame existant
         if new_col_name not in st.session_state.df.columns:
-            st.session_state.df[new_col_name] = pd.Series()
+            st.session_state.df[new_col_name] = pd.Series(dtype='object')
 
 # Si des colonnes ont été ajoutées
 if st.session_state.df.columns.tolist():
@@ -57,7 +57,8 @@ if st.session_state.df.columns.tolist():
         user_name = st.text_input("Entrez votre nom")
         if user_name:
             if st.button("Valider"):
-                signature = pd.Series({st.session_state.col_names[0] : user_name, st.session_state.col_names[1] : str(datetime.datetime.now())})
+                signature_data = {st.session_state.col_names[0]: f"Signé par {user_name} le {datetime.datetime.now()}"}
+                signature = pd.Series(signature_data)
                 st.session_state.df = pd.concat([st.session_state.df, signature.to_frame().T], ignore_index=True)
     with col3:
         if st.button("Réinitialiser"):
@@ -66,7 +67,7 @@ if st.session_state.df.columns.tolist():
             st.session_state.col_names = []
             st.rerun()
 
-    # Ajouter des boutons pour télécharger le DataFrame dans différents formats
+    # Boutons de téléchargement dans différents formats
     if st.session_state.show_download_buttons:
         col1, col2, col3 = st.columns(3)
         with col1:
