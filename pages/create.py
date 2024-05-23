@@ -60,6 +60,7 @@ if st.session_state.df.columns.tolist():
                 signature_data = {st.session_state.col_names[0]: f"Signé par {user_name} le {datetime.datetime.now()}"}
                 signature = pd.Series(signature_data)
                 st.session_state.df = pd.concat([st.session_state.df, signature.to_frame().T], ignore_index=True)
+                st.dataframe(st.session_state.df)
     with col3:
         if st.button("Réinitialiser"):
             st.session_state.df = pd.DataFrame()
