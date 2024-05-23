@@ -63,9 +63,10 @@ if st.session_state.df.columns.tolist():
         user_name = st.text_input("Entrez votre nom")
         if user_name:
             if st.button("Valider"):
-                signature_data = {st.session_state.col_names[0]: f"Modifié par {user_name} le {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"}
-                signature = pd.Series(signature_data)
-                st.session_state.df = pd.concat([st.session_state.df, signature.to_frame().T], ignore_index=True)
+                signature_value = f"Modifié par {user_name} le {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+                if "SIGNATURE" not in st.session_state.df.columns:
+                    st.session_state.df["SIGNATURE"] = ""
+                st.session_state.df["SIGNATURE"] = signature_value
                 st.session_state.show_signature_button = False
                 st.rerun()
     with col3:
