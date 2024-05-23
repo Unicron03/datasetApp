@@ -20,6 +20,8 @@ if "show_signature_button" not in st.session_state:
 coll1, coll2, coll3 = st.columns(3)
 with coll2:
     st.markdown("# Create")
+st.write("")
+st.write("")
 
 # Demander le nom de la nouvelle colonne
 new_col_name = st.text_input("Entrez le nom de la nouvelle colonne")
@@ -61,7 +63,7 @@ if st.session_state.df.columns.tolist():
         user_name = st.text_input("Entrez votre nom")
         if user_name:
             if st.button("Valider"):
-                signature_data = {st.session_state.col_names[0]: f"Modifié par {user_name} le {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"}
+                signature_data = {st.session_state.col_names[0]: f"Modifié par {user_name} le {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"}
                 signature = pd.Series(signature_data)
                 st.session_state.df = pd.concat([st.session_state.df, signature.to_frame().T], ignore_index=True)
                 st.session_state.show_signature_button = False
