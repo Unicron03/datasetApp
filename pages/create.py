@@ -23,6 +23,14 @@ with coll2:
 st.write("")
 st.write("")
 
+# Fonction pour déplacer la colonne "SIGNATURE" à la fin
+def move_signature_to_end(df):
+    if "SIGNATURE" in df.columns:
+        cols = [col for col in df.columns if col != "SIGNATURE"]
+        cols.append("SIGNATURE")
+        return df[cols]
+    return df
+
 # Demander le nom de la nouvelle colonne
 new_col_name = st.text_input("Entrez le nom de la nouvelle colonne")
 if new_col_name:  # Vérifier si le nom de la colonne n'est pas vide
@@ -31,10 +39,11 @@ if new_col_name:  # Vérifier si le nom de la colonne n'est pas vide
         # Ajouter la nouvelle colonne au DataFrame existant
         if new_col_name not in st.session_state.df.columns:
             st.session_state.df[new_col_name] = pd.Series(dtype='object')
+            st.session_state.df = move_signature_to_end(st.session_state.df)
 
 # Si des colonnes ont été ajoutées
 if st.session_state.df.columns.tolist():
-    # Demander les valeurs pour chaque colonne
+    # Demander les valeurs pour chaque colonne sauf "SIGNATURE"
     for col_name in st.session_state.df.columns:
         if col_name != "SIGNATURE":
             st.session_state.new_row[col_name] = st.text_input(f"Entrez la valeur pour '{col_name}'")
@@ -44,6 +53,7 @@ if st.session_state.df.columns.tolist():
         # Ajouter la nouvelle ligne au DataFrame
         new_data = pd.DataFrame(st.session_state.new_row, index=[0])
         st.session_state.df = pd.concat([st.session_state.df, new_data], ignore_index=True)
+        st.session_state.df = move_signature_to_end(st.session_state.df)
 
     # Afficher le DataFrame
     st.dataframe(st.session_state.df)
@@ -68,6 +78,7 @@ if st.session_state.df.columns.tolist():
                 if "SIGNATURE" not in st.session_state.df.columns:
                     st.session_state.df["SIGNATURE"] = ""
                 st.session_state.df["SIGNATURE"] = signature_value
+                st.session_state.df = move_signature_to_end(st.session_state.df)
                 st.session_state.show_signature_button = False
                 st.rerun()
     with col3:
