@@ -17,11 +17,16 @@ if "show_download_buttons" not in st.session_state:
 if "show_signature_button" not in st.session_state:
     st.session_state.show_signature_button = False
 
-coll1, coll2, coll3 = st.columns(3)
-with coll2:
-    st.markdown("# Create")
-st.write("")
-st.write("")
+st.markdown("""
+    <style>
+    .title {
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+    }
+    </style>
+    <div class="title">Create</div>
+""", unsafe_allow_html=True)
 
 # Fonction pour déplacer la colonne "SIGNATURE" à la fin
 def move_signature_to_end(df):
@@ -31,30 +36,32 @@ def move_signature_to_end(df):
         return df[cols]
     return df
 
-# Demander le nom de la nouvelle colonne
-new_col_name = st.text_input("Entrez le nom de la nouvelle colonne")
-if new_col_name:  # Vérifier si le nom de la colonne n'est pas vide
-    if st.button("Ajouter la colonne"):
-        st.session_state.col_names.append(new_col_name)
-        # Ajouter la nouvelle colonne au DataFrame existant
-        if new_col_name not in st.session_state.df.columns:
-            st.session_state.df[new_col_name] = pd.Series(dtype='object')
-            st.session_state.df = move_signature_to_end(st.session_state.df)
+st.write('### Création du DataFrame :')
+with st.form(key='modification_form'):
+    # Demander le nom de la nouvelle colonne
+    new_col_name = st.text_input("Entrez le nom de la nouvelle colonne")
+    if new_col_name:  # Vérifier si le nom de la colonne n'est pas vide
+        if st.button("Ajouter la colonne"):
+            st.session_state.col_names.append(new_col_name)
+            # Ajouter la nouvelle colonne au DataFrame existant
+            if new_col_name not in st.session_state.df.columns:
+                st.session_state.df[new_col_name] = pd.Series(dtype='object')
+                st.session_state.df = move_signature_to_end(st.session_state.df)
 
-# Si des colonnes ont été ajoutées
-if st.session_state.df.columns.tolist():
-    with st.expander("Saisie des données", expanded=True):
-        # Demander les valeurs pour chaque colonne sauf "SIGNATURE"
-        for col_name in st.session_state.df.columns:
-            if col_name != "SIGNATURE":
-                st.session_state.new_row[col_name] = st.text_input(f"Entrez la valeur pour '{col_name}'")
+    # Si des colonnes ont été ajoutées
+    if st.session_state.df.columns.tolist():
+        with st.expander("Saisie des données", expanded=True):
+            # Demander les valeurs pour chaque colonne sauf "SIGNATURE"
+            for col_name in st.session_state.df.columns:
+                if col_name != "SIGNATURE":
+                    st.session_state.new_row[col_name] = st.text_input(f"Entrez la valeur pour '{col_name}'")
 
-        # Si l'utilisateur clique sur le bouton "Ajouter la ligne"
-        if st.button("Ajouter la ligne"):
-            # Ajouter la nouvelle ligne au DataFrame
-            new_data = pd.DataFrame(st.session_state.new_row, index=[0])
-            st.session_state.df = pd.concat([st.session_state.df, new_data], ignore_index=True)
-            st.session_state.df = move_signature_to_end(st.session_state.df)
+            # Si l'utilisateur clique sur le bouton "Ajouter la ligne"
+            if st.button("Ajouter la ligne"):
+                # Ajouter la nouvelle ligne au DataFrame
+                new_data = pd.DataFrame(st.session_state.new_row, index=[0])
+                st.session_state.df = pd.concat([st.session_state.df, new_data], ignore_index=True)
+                st.session_state.df = move_signature_to_end(st.session_state.df)
 
     # Afficher le DataFrame
     st.write('### Visualisation du DataFrame :')
@@ -64,14 +71,14 @@ if st.session_state.df.columns.tolist():
     col1, col2, col3 = st.columns(3)
     with col1:
         # Si l'utilisateur clique sur le bouton "Télécharger", basculer l'état des boutons de téléchargement
-        with st.expander("Télécharger", expanded=True):
+        with st.expander("Télécharger", expanded=False):
             st.download_button("Télécharger en CSV", data=st.session_state.df.to_csv(index=False), file_name="data.csv", mime="text/csv")
             st.download_button("Télécharger en JSON", data=st.session_state.df.to_json(orient="records"), file_name="data.json", mime="application/json")
             table = pa.Table.from_pandas(st.session_state.df)
             pq.write_table(table, 'data.parquet')
             st.download_button("Télécharger en Parquet", data=open('data.parquet', 'rb').read(), file_name="data.parquet", mime="application/octet-stream")
     with col2:
-        with st.expander("Ajout signature", expanded=True):
+        with st.expander("Ajout signature", expanded=False):
             user_name = st.text_input("Entrez votre nom")
             if user_name:
                 if st.button("Valider"):
