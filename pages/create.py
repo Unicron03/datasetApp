@@ -43,10 +43,11 @@ if new_col_name:  # Vérifier si le nom de la colonne n'est pas vide
 
 # Si des colonnes ont été ajoutées
 if st.session_state.df.columns.tolist():
-    # Demander les valeurs pour chaque colonne sauf "SIGNATURE"
-    for col_name in st.session_state.df.columns:
-        if col_name != "SIGNATURE":
-            st.session_state.new_row[col_name] = st.text_input(f"Entrez la valeur pour '{col_name}'")
+    with st.expander("Saisie des données", expanded=True):
+        # Demander les valeurs pour chaque colonne sauf "SIGNATURE"
+        for col_name in st.session_state.df.columns:
+            if col_name != "SIGNATURE":
+                st.session_state.new_row[col_name] = st.text_input(f"Entrez la valeur pour '{col_name}'")
 
     # Si l'utilisateur clique sur le bouton "Ajouter la ligne"
     if st.button("Ajouter la ligne"):
