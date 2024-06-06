@@ -1,5 +1,4 @@
-﻿from inspect import signature
-import streamlit as st
+﻿import streamlit as st
 import pandas as pd
 import pyarrow.parquet as pq
 import pyarrow as pa
@@ -12,8 +11,8 @@ if "new_row" not in st.session_state:
     st.session_state.new_row = {}
 if "col_names" not in st.session_state:
     st.session_state.col_names = []
-if "new_col_name" not in st.session_state:
-    st.session_state.new_col_name = ""  # Ajouter cette ligne pour stocker la valeur du champ de texte
+if "col_types" not in st.session_state:
+    st.session_state.col_types = {}  # Stocker le type de chaque colonne
 
 # Centrer le titre avec CSS
 st.markdown("""
@@ -39,18 +38,31 @@ def move_signature_to_end(df):
 
 st.write('### Création du DataFrame :')
 
-# Utiliser la clé 'new_col_name' dans st.session_state pour gérer la valeur du champ de texte
-st.session_state.new_col_name = st.text_input("Entrez le nom de la nouvelle colonne", value=st.session_state.new_col_name, key="new_col_input")
-if st.session_state.new_col_name:  # Vérifier si le nom de la colonne n'est pas vide
+# Demander le nom de la nouvelle colonne
+new_col_name = st.text_input("Entrez le nom de la nouvelle colonne")
+
+# Sélectionner le type de la colonne
+col_type = st.selectbox(
+    "Sélectionnez le type de la colonne",
+    options=["string", "int", "float", "bool"],
+    key="col_type_input"
+)
+
+if new_col_name and col_type:  # Vérifier si le nom de la colonne et le type ne sont pas vides
     if st.button("Ajouter la colonne"):
-        st.session_state.col_names.append(st.session_state.new_col_name)
-        # Ajouter la nouvelle colonne au DataFrame existant
-        if st.session_state.new_col_name not in st.session_state.df.columns:
-            st.session_state.df[st.session_state.new_col_name] = pd.Series(dtype='object')
+        st.session_state.col_names.append(new_col_name)
+        st.session_state.col_types[new_col_name] = col_type  # Stocker le type de la colonne
+        # Ajouter la nouvelle colonne au DataFrame existant avec le type approprié
+        if new_col_name not in st.session_state.df.columns:
+            if col_type == "string":
+                st.session_state.df[new_col_name] = pd.Series(dtype='object')
+            elif col_type == "int":
+                st.session_state.df[new_col_name] = pd.Series(dtype='int64')
+            elif col_type == "float":
+                st.session_state.df[new_col_name] = pd.Series(dtype='float64')
+            elif col_type == "bool":
+                st.session_state.df[new_col_name] = pd.Series(dtype='bool')
             st.session_state.df = move_signature_to_end(st.session_state.df)
-        
-        # Réinitialiser la valeur de la zone de texte
-        st.session_state.new_col_name = ""  # Réinitialiser après l'ajout de la colonne
 
 # Si des colonnes ont été ajoutées
 if st.session_state.df.columns.tolist():
@@ -58,7 +70,15 @@ if st.session_state.df.columns.tolist():
         # Demander les valeurs pour chaque colonne sauf "SIGNATURE"
         for col_name in st.session_state.df.columns:
             if col_name != "SIGNATURE":
-                st.session_state.new_row[col_name] = st.text_input(f"Entrez la valeur pour '{col_name}'")
+                col_type = st.session_state.col_types[col_name]
+                if col_type == "string":
+                    st.session_state.new_row[col_name] = st.text_input(f"Entrez la valeur pour '{col_name}'")
+                elif col_type == "int":
+                    st.session_state.new_row[col_name] = st.number_input(f"Entrez une valeur entière pour '{col_name}'", step=1)
+                elif col_type == "float":
+                    st.session_state.new_row[col_name] = st.number_input(f"Entrez une valeur décimale pour '{col_name}'")
+                elif col_type == "bool":
+                    st.session_state.new_row[col_name] = st.selectbox(f"Sélectionnez True ou False pour '{col_name}'", options=[True, False])
 
         # Si l'utilisateur clique sur le bouton "Ajouter la ligne"
         if st.button("Ajouter la ligne"):
@@ -66,6 +86,7 @@ if st.session_state.df.columns.tolist():
             new_data = pd.DataFrame(st.session_state.new_row, index=[0])
             st.session_state.df = pd.concat([st.session_state.df, new_data], ignore_index=True)
             st.session_state.df = move_signature_to_end(st.session_state.df)
+            st.session_state.new_row = {}  # Réinitialiser les valeurs des nouvelles données après l'ajout
 
 # Afficher le DataFrame
 st.write('### Visualisation du DataFrame :')
