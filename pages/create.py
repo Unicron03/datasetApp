@@ -38,17 +38,17 @@ def move_signature_to_end(df):
 
 st.write('### Création du DataFrame :')
 
-# Demander le nom de la nouvelle colonne
-new_col_name = st.text_input("Entrez le nom de la nouvelle colonne")
-
-# Sélectionner le type de la colonne
-col_type = st.selectbox(
-    "Sélectionnez le type de la colonne",
-    options=["string", "int", "float", "bool"],
-    key="col_type_input"
-)
-
 with st.expander("Insérer une colonne", expanded=True):
+    # Demander le nom de la nouvelle colonne
+    new_col_name = st.text_input("Entrez le nom de la nouvelle colonne")
+
+    # Sélectionner le type de la colonne
+    col_type = st.selectbox(
+        "Sélectionnez le type de la colonne",
+        options=["string", "int", "float", "bool"],
+        key="col_type_input"
+    )
+
     if new_col_name and col_type:  # Vérifier si le nom de la colonne et le type ne sont pas vides
         if st.button("Ajouter la colonne"):
             st.session_state.col_names.append(new_col_name)
@@ -111,7 +111,8 @@ with col2:
                 signature_value = f"Modifié par {user_name} le {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
                 if "SIGNATURE" not in st.session_state.df.columns:
                     st.session_state.df["SIGNATURE"] = ""
-                st.session_state.df["SIGNATURE"] = signature_value
+                else:
+                    st.session_state.df.at[0, "SIGNATURE"] = signature_value  # Ajouter la signature uniquement à la première ligne
                 st.session_state.df = move_signature_to_end(st.session_state.df)
                 st.rerun()
 with col3:
@@ -119,4 +120,5 @@ with col3:
         st.session_state.df = pd.DataFrame()
         st.session_state.new_row = {}
         st.session_state.col_names = []
+        st.session_state.col_types = {}
         st.rerun()
