@@ -112,10 +112,9 @@ with col2:
             if st.button("Valider"):
                 signature_value = f"Modifié par {user_name} le {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
                 if "SIGNATURE" not in st.session_state.df.columns:
-                    st.session_state.df["SIGNATURE"] = signature_value
+                    st.session_state.df.iloc[0, st.session_state.df.columns.get_loc("SIGNATURE")] = signature_value
                 else:
-                    st.session_state.df.at[0, "SIGNATURE"] = signature_value  # Ajouter la signature uniquement à la première ligne
-                # st.session_state.df = move_signature_to_end(st.session_state.df)
+                    st.session_state.df.at[0, "SIGNATURE"] = signature_value
                 st.rerun()
 with col3:
     if st.button("Réinitialiser"):
