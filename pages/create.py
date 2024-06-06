@@ -113,7 +113,7 @@ with col2:
                 signature_value = f"Modifié par {user_name} le {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
                 if "SIGNATURE" not in st.session_state.df.columns:
                     st.session_state.df["SIGNATURE"] = pd.Series(dtype='object')  # Créez la colonne avec des valeurs nulles
-                    st.session_state.df.at[0, "SIGNATURE"] = signature_value  # Ajoutez la signature uniquement à la première ligne
+                st.session_state.df.at[0, "SIGNATURE"] = signature_value  # Ajoutez la signature uniquement à la première ligne
                 st.rerun()
 with col3:
     if st.button("Réinitialiser"):
