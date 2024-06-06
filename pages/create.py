@@ -48,37 +48,38 @@ col_type = st.selectbox(
     key="col_type_input"
 )
 
-if new_col_name and col_type:  # Vérifier si le nom de la colonne et le type ne sont pas vides
-    if st.button("Ajouter la colonne"):
-        st.session_state.col_names.append(new_col_name)
-        st.session_state.col_types[new_col_name] = col_type  # Stocker le type de la colonne
-        # Ajouter la nouvelle colonne au DataFrame existant avec le type approprié
-        if new_col_name not in st.session_state.df.columns:
-            if col_type == "string":
-                st.session_state.df[new_col_name] = pd.Series(dtype='object')
-            elif col_type == "int":
-                st.session_state.df[new_col_name] = pd.Series(dtype='int64')
-            elif col_type == "float":
-                st.session_state.df[new_col_name] = pd.Series(dtype='float64')
-            elif col_type == "bool":
-                st.session_state.df[new_col_name] = pd.Series(dtype='bool')
-            st.session_state.df = move_signature_to_end(st.session_state.df)
+with st.expander("Insérer une colonne", expanded=True):
+    if new_col_name and col_type:  # Vérifier si le nom de la colonne et le type ne sont pas vides
+        if st.button("Ajouter la colonne"):
+            st.session_state.col_names.append(new_col_name)
+            st.session_state.col_types[new_col_name] = col_type  # Stocker le type de la colonne
+            # Ajouter la nouvelle colonne au DataFrame existant avec le type approprié
+            if new_col_name not in st.session_state.df.columns:
+                if col_type == "string":
+                    st.session_state.df[new_col_name] = pd.Series(dtype='object')
+                elif col_type == "int":
+                    st.session_state.df[new_col_name] = pd.Series(dtype='int64')
+                elif col_type == "float":
+                    st.session_state.df[new_col_name] = pd.Series(dtype='float64')
+                elif col_type == "bool":
+                    st.session_state.df[new_col_name] = pd.Series(dtype='bool')
+                st.session_state.df = move_signature_to_end(st.session_state.df)
 
 # Si des colonnes ont été ajoutées
 if st.session_state.df.columns.tolist():
-    with st.expander("Saisie des données", expanded=True):
+    with st.expander("Insérer une ligne", expanded=True):
         # Demander les valeurs pour chaque colonne sauf "SIGNATURE"
         for col_name in st.session_state.df.columns:
             if col_name != "SIGNATURE":
                 col_type = st.session_state.col_types[col_name]
                 if col_type == "string":
-                    st.session_state.new_row[col_name] = st.text_input(f"Entrez la valeur pour '{col_name}'")
+                    st.session_state.new_row[col_name] = st.text_input(f"Entrez la valeur pour '{col_name}' (string)")
                 elif col_type == "int":
-                    st.session_state.new_row[col_name] = st.number_input(f"Entrez une valeur entière pour '{col_name}'", step=1)
+                    st.session_state.new_row[col_name] = st.number_input(f"Entrez une valeur entière pour '{col_name}' (int)", step=1)
                 elif col_type == "float":
-                    st.session_state.new_row[col_name] = st.number_input(f"Entrez une valeur décimale pour '{col_name}'")
+                    st.session_state.new_row[col_name] = st.number_input(f"Entrez une valeur décimale pour '{col_name}' (float)")
                 elif col_type == "bool":
-                    st.session_state.new_row[col_name] = st.selectbox(f"Sélectionnez True ou False pour '{col_name}'", options=[True, False])
+                    st.session_state.new_row[col_name] = st.selectbox(f"Sélectionnez True ou False pour '{col_name}' (bool)", options=[True, False])
 
         # Si l'utilisateur clique sur le bouton "Ajouter la ligne"
         if st.button("Ajouter la ligne"):
