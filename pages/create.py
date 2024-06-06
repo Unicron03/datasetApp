@@ -115,7 +115,7 @@ with col2:
                     st.session_state.df["SIGNATURE"] = signature_value
                 else:
                     st.session_state.df.at[0, "SIGNATURE"] = signature_value  # Ajouter la signature uniquement à la première ligne
-                st.session_state.df = move_signature_to_end(st.session_state.df)
+                # st.session_state.df = move_signature_to_end(st.session_state.df)
                 st.rerun()
 with col3:
     if st.button("Réinitialiser"):
