@@ -37,7 +37,7 @@ def move_signature_to_end(df):
     return df
 
 st.write('### Création du DataFrame :')
-with st.form(key='modification_form'):
+with st.form("create_form"):
     # Demander le nom de la nouvelle colonne
     new_col_name = st.text_input("Entrez le nom de la nouvelle colonne")
     if new_col_name:  # Vérifier si le nom de la colonne n'est pas vide
