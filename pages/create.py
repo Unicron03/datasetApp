@@ -64,6 +64,8 @@ with st.expander("Insérer une colonne", expanded=True):
                 elif col_type == "bool":
                     st.session_state.df[new_col_name] = pd.Series(dtype='bool')
                 st.session_state.df = move_signature_to_end(st.session_state.df)
+            # Réinitialiser le champ de texte après ajout
+            st.experimental_rerun()
 
 # Si des colonnes ont été ajoutées
 if st.session_state.df.columns.tolist():
@@ -73,13 +75,13 @@ if st.session_state.df.columns.tolist():
             if col_name != "SIGNATURE":
                 col_type = st.session_state.col_types[col_name]
                 if col_type == "string":
-                    st.session_state.new_row[col_name] = st.text_input(f"Entrez la valeur pour '{col_name}' (string)")
+                    st.session_state.new_row[col_name] = st.text_input(f"Entrez la valeur pour '{col_name}' (string)", key=f"input_{col_name}")
                 elif col_type == "int":
-                    st.session_state.new_row[col_name] = st.number_input(f"Entrez une valeur entière pour '{col_name}' (int)", step=1)
+                    st.session_state.new_row[col_name] = st.number_input(f"Entrez une valeur entière pour '{col_name}' (int)", step=1, key=f"input_{col_name}")
                 elif col_type == "float":
-                    st.session_state.new_row[col_name] = st.number_input(f"Entrez une valeur décimale pour '{col_name}' (float)")
+                    st.session_state.new_row[col_name] = st.number_input(f"Entrez une valeur décimale pour '{col_name}' (float)", key=f"input_{col_name}")
                 elif col_type == "bool":
-                    st.session_state.new_row[col_name] = st.selectbox(f"Sélectionnez True ou False pour '{col_name}' (bool)", options=[True, False])
+                    st.session_state.new_row[col_name] = st.selectbox(f"Sélectionnez True ou False pour '{col_name}' (bool)", options=[True, False], key=f"input_{col_name}")
 
         # Si l'utilisateur clique sur le bouton "Ajouter la ligne"
         if st.button("Ajouter la ligne"):
@@ -110,7 +112,7 @@ with col2:
             if st.button("Valider"):
                 signature_value = f"Modifié par {user_name} le {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
                 if "SIGNATURE" not in st.session_state.df.columns:
-                    st.session_state.df["SIGNATURE"] = ""
+                    st.session_state.df["SIGNATURE"] = signature_value
                 else:
                     st.session_state.df.at[0, "SIGNATURE"] = signature_value  # Ajouter la signature uniquement à la première ligne
                 st.session_state.df = move_signature_to_end(st.session_state.df)
