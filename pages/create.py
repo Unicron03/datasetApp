@@ -60,23 +60,28 @@ if st.session_state.df.columns.tolist():
     st.write('### Visualisation du DataFrame :')
     st.dataframe(st.session_state.df)
 
+    st.write('### Gestion du DataFrame :')
     col1, col2, col3 = st.columns(3)
     with col1:
         # Si l'utilisateur clique sur le bouton "Télécharger", basculer l'état des boutons de téléchargement
         with st.expander("Télécharger", expanded=True):
-            cols1, cols2, cols3 = st.columns(3)
-            with cols1:
-                st.download_button("Télécharger en CSV", data=st.session_state.df.to_csv(index=False), file_name="data.csv", mime="text/csv")
-            with cols2:
-                st.download_button("Télécharger en JSON", data=st.session_state.df.to_json(orient="records"), file_name="data.json", mime="application/json")
-            with cols3:
-                table = pa.Table.from_pandas(st.session_state.df)
-                pq.write_table(table, 'data.parquet')
-                st.download_button("Télécharger en Parquet", data=open('data.parquet', 'rb').read(), file_name="data.parquet", mime="application/octet-stream")
+            st.download_button("Télécharger en CSV", data=st.session_state.df.to_csv(index=False), file_name="data.csv", mime="text/csv")
+            st.download_button("Télécharger en JSON", data=st.session_state.df.to_json(orient="records"), file_name="data.json", mime="application/json")
+            table = pa.Table.from_pandas(st.session_state.df)
+            pq.write_table(table, 'data.parquet')
+            st.download_button("Télécharger en Parquet", data=open('data.parquet', 'rb').read(), file_name="data.parquet", mime="application/octet-stream")
     with col2:
-        if st.button("Ajout signature"):
-            st.session_state.show_download_buttons = False
-            st.session_state.show_signature_button = not st.session_state.show_signature_button
+        with st.expander("Ajout signature", expanded=True):
+            user_name = st.text_input("Entrez votre nom")
+            if user_name:
+                if st.button("Valider"):
+                    signature_value = f"Modifié par {user_name} le {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+                    if "SIGNATURE" not in st.session_state.df.columns:
+                        st.session_state.df["SIGNATURE"] = ""
+                    st.session_state.df["SIGNATURE"] = signature_value
+                    st.session_state.df = move_signature_to_end(st.session_state.df)
+                    st.session_state.show_signature_button = False
+                    st.rerun()
 
     # Si l'utilisateur a cliqué sur "Ajout signature"
     if st.session_state.show_signature_button:
