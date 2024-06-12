@@ -5,7 +5,18 @@ import io
 from datetime import datetime
 
 #---------------------------------------------------Titre--------------------------------------------------------------
-st.markdown("<h1 style='text-align: center;'>Update</h1>", unsafe_allow_html=True)
+st.markdown("""
+    <style>
+    .title {
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+    }
+    </style>
+    <div class="title">Update</div>
+""", unsafe_allow_html=True)
+st.write("")
+st.write("")
 
 #--------------------------------------------------------Lire les fichiers-----------------------------------------------------------------------(valider)
 def load_file(file):
